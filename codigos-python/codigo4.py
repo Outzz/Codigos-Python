@@ -64,6 +64,7 @@ def mostrar_menu():
     print("3 - Buscar usuário com email")
     print("4 - Fazer publicação")
     print("5 - Ver publicações")
+    print("6 - Curtir publicações")
     print("0 - Sair")
     return input("Digite a opção: ")
     
@@ -98,10 +99,26 @@ while True:
             print(f"Conteúdo: {pub.conteudo}")
             print(f"Data/Hora: {pub.data_hora.strftime('%d/%m/%Y %H:%M:%S')}")
             print(f"Curtidas: {pub.curtidas}")
+            
+    elif opcao == "6":
+        print("\n=== Curtir Publicação ===")
+        if not lista_publicacoes:
+            print("Nenhuma publicação disponível para curtir.")
+            continue
+    
+        for i, pub in enumerate(lista_publicacoes):
+            print(f"{i} - {pub.descricao} (Autor: {pub.autor}, Curtidas: {pub.curtidas})")
+    
+        try:
+            indice = int(input("Digite o número da publicação que deseja curtir: "))
+            if 0 <= indice < len(lista_publicacoes):
+                lista_publicacoes[indice].curtidas += 1
+                print("Você curtiu a publicação!")
+            else:
+                print("Índice inválido.")
+        except ValueError:
+            print("Por favor, digite um número válido.")
 
     elif opcao == "0":
         print("Encerrando o programa.")
-        break
-
-    else:
-        print("Opção inválida. Tente novamente.")
+        break 
