@@ -14,6 +14,17 @@ class Publicacao:
     autor: str
     data_hora: datetime
     curtidas: int = 0
+    comentarios: list = None 
+
+    def __post_init__(self):
+        if self.comentarios is None:
+            self.comentarios = []
+
+@dataclass
+class Comentario:
+    autor: str
+    conteudo: str
+    data_hora: datetime
 
 lista_usuarios = []
 lista_publicacoes = []
@@ -56,6 +67,32 @@ def criar_publicacao(usuario_logado):
     )
     lista_publicacoes.append(nova_publicacao)
     print("Publicação postada!")
+
+def comentar_publicacao(usuario_logado):
+    if not lista_publicacoes:
+        print("Nenhuma publicação disponível para comentar😢")
+        return
+
+    print("\n=== Publicações Disponíveis ===")
+    for i, pub in enumerate(lista_publicacoes):
+        print(f"{i} - {pub.descricao} (Autor: {pub.autor})")
+
+    try:
+        indice = int(input("Digite o número da publicação que você quer comentar: "))
+        if 0 <= indice < len(lista_publicacoes):
+            texto = input("Digite o seu comentário: ")
+            novo_comentario = Comentario(
+                autor=usuario_logado.nome,
+                conteudo=texto,
+                data_hora=datetime.now()
+            )
+            lista_publicacoes[indice].comentarios.append(novo_comentario)
+            print("Comentário Adicionado Com Sucesso!")
+        else:
+            print("Comentário inválido. Tente novamente")
+    except ValueError:
+        print("Digite um número válido!")
+
         
 def mostrar_menu():
     print("\n === Bem-Vindo! O que deseja fazer? ===")
@@ -65,6 +102,7 @@ def mostrar_menu():
     print("4 - Fazer publicação")
     print("5 - Ver publicações")
     print("6 - Curtir publicações")
+    print("7 - Comentar Publicação")
     print("0 - Sair")
     return input("Digite a opção: ")
     
@@ -95,10 +133,16 @@ while True:
             print("Nenhuma publicação encontrada.")
         for pub in lista_publicacoes:
             print(f"\nAutor: {pub.autor}")
-            print(f"Descrição: {pub.descricao}")
             print(f"Conteúdo: {pub.conteudo}")
+            print(f"Descrição: {pub.descricao}")
             print(f"Data/Hora: {pub.data_hora.strftime('%d/%m/%Y %H:%M:%S')}")
             print(f"Curtidas: {pub.curtidas}")
+            print(f"Comentários:")
+            if pub.comentarios:
+                for comentario in pub.comentarios:
+                    print(f" - {comentario.autor} ({comentario.data_hora.strftime('%d/%m %H:%M')}): {comentario.conteudo}")
+                else:
+                    print("Nenhum comentário ainda.")
             
     elif opcao == "6":
         print("\n=== Curtir Publicação ===")
@@ -119,6 +163,12 @@ while True:
         except ValueError:
             print("Por favor, digite um número válido.")
 
+    elif opcao == "7":
+        if usuario_atual:
+            comentar_publicacao(usuario_atual)
+        else:
+            print("Você precisa estar logado para comentar.")
+
     elif opcao == "0":
         print("Encerrando o programa.")
-        break 
+        break
