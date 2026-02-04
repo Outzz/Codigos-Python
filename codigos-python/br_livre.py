@@ -2,7 +2,7 @@ produtos = []
 carrinho = []
 
 def menu():
-    print("\n===== MINI MERCADO LIVRE =====")
+    print("\n===== BR LIVRE =====")
     print("1 - Cadastrar produto")
     print("2 - Listar produtos")
     print("3 - Pesquisar produto")
@@ -134,3 +134,4 @@ while True:
         break
     else:
         print("Opção inválida.")
+
