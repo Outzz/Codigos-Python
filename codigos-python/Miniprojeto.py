@@ -163,3 +163,47 @@ def saida_estoque(tipo):
             print("Saída Registrada")
         else:
             print("Estoque Insuficiente❌")
+            
+def comprar():
+    print("\n----- COMPRA -----")
+    listar_compras()
+    
+    pid = int(input("ID do Produto: "))
+    quantidade = int(input("Quantidade: "))
+    
+    for p in produtos:
+        if p.id == pid:
+            if quantidade <= p.estoque:
+                p.estoque -= p.quantidade
+                
+                total = p.valor_venda * quantidade
+                
+                compra = Compra(
+                    proximo_id(movimentos),
+                    pid,
+                    quantidade,
+                    total,
+                    agora()
+                    )
+                compras.append(compra)
+                
+                movimento = MovimentoEstoque(
+                proximo_id(movimentos),
+                pid,
+                "SAÍDA VENDA",
+                quantidade,
+                agora()
+            )
+            movimentos.append(movimento)
+            
+            print("Compra Realizada! Total: ", total)
+
+def listar_compras():
+    print("\n----- COMPRAS -----")
+    for c in compras:
+     print(c)
+     
+def listar_movimentos():
+    print("\n----- MOVIMENTO -----")
+    for m in movimentos:
+    print(m)
