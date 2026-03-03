@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from datatime import datatime
+from datetime import datetime
 
 @dataclass
 class Fornecedor:
@@ -21,7 +21,7 @@ class Produto:
     fornecedor_id: int
     
 @dataclass
-class MovimentoEstoque
+class MovimentoEstoque:
     id: int
     produto_id: int
     tipo: str
@@ -49,8 +49,8 @@ def agora():
     
 def cadastrar_fornecedor():
     print("\n----- CADASTRO DE FORNECEDOR -----")
-    nome_empresa input("Digite o nome da empresa: ")
-    cnpj input("Digite seu CNPJ: ")
+    nome = input("Digite o nome da empresa: ")
+    cnpj = input("Digite seu CNPJ: ")
     
     fornecedor = Fornecedor(
         proximo_id(fornecedores),
@@ -67,7 +67,7 @@ def listar_fornecedores():
         print(f)
         
 def cadastrar_produtos():
-    if len(fornecedores) = 0:
+    if len(fornecedores) == 0:
         print("Cadastre um fornecedor primeiro")
         return
     
@@ -85,7 +85,7 @@ def cadastrar_produtos():
     listar_fornecedores()
     fornecedor_id = int(input("ID DO FORNECEDOR: "))
     
-    produto = Produtos(
+    produto = Produto(
         proximo_id(produtos),
         nome,
         categoria, 
@@ -93,16 +93,17 @@ def cadastrar_produtos():
         cor,
         codigo_barras,
         custo,
-        vendas,
+        venda,
         estoque,
         fornecedor_id
-        
+    )
+
     produtos.append(produto)
     
     if estoque > 0:
         movimento = MovimentoEstoque(
             proximo_id(movimento),
-            produto_id,
+            produto.id,
             "ENTRADA",
             estoque,
             agora()
@@ -130,9 +131,9 @@ def entrada_estoque():
             
             movimento = MovimentoEstoque(
             proximo_id(movimentos),
-            produto_id,
+            pid,
             "ENTRADA",
-            estoque,
+            quantidade,
             agora()
         )
         movimentos.append(movimento)
@@ -206,4 +207,50 @@ def listar_compras():
 def listar_movimentos():
     print("\n----- MOVIMENTO -----")
     for m in movimentos:
-    print(m)
+        print(m)
+
+def menu():
+    while True:
+        print("\n ----- Menu Inicial -----")
+        print("1 - Cadastrar fornecedor")
+        print("2 - Cadastrar produto")
+        print("3 - Entrada de estoque")
+        print("4 - Saída por venda")
+        print("5 - Cadastrar fornecedor")
+        print("6 - Saída por avaria")
+        print("7 - Comprar produto")
+        print("8 - Listar produtos")
+        print("9 - Listar compras")
+        print("10 - Listar movimentos")
+        print("0 - Sair")
+
+        op = input("Escolha: ")
+
+        if op == "1":
+            cadastrar_fornecedor()
+        elif op == "2":
+            cadastrar_produtos()
+        elif op == "3":
+            entrada_estoque()
+        elif op == "4":
+            saida_estoque("SAIDA_VENDA")
+        elif op == "5":
+            saida_estoque("SAIDA_TROCA")
+        elif op == "6":
+            saida_estoque("SAIDA_AVARIA")
+        elif op == "7":
+            comprar()
+        elif op == "8":
+            listar_produtos()
+        elif op == "9":
+            listar_compras()
+        elif op == "10":
+            listar_movimentos()
+        elif op == "0":
+            break
+        else:
+            print("Opção inválida.")
+
+
+
+menu()
